@@ -1,3 +1,2 @@
-*.txt
-./logs/
-./models/
+logs/*
+models/*
