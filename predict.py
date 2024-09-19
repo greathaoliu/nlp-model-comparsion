@@ -104,7 +104,7 @@ def main(year, model, cuda_devices):
     df['score2_预测'] = score2_predictions
     
     # Save the results to a new CSV
-    output_file = f'{year}-{model}.csv'
+    output_file = f'./predict/{year}-{model}.csv'
     df.to_csv(output_file, index=False)
     print(f"Predictions saved to '{output_file}'")
 
