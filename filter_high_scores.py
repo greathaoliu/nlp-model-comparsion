@@ -1,5 +1,6 @@
 import pandas as pd
 import csv
+import os
 
 def load_prediction_data(file_path):
     def read_csv_robust(file_path):
@@ -26,26 +27,45 @@ def load_prediction_data(file_path):
     
     return df
 
-years = '2023'
-model = 'roberta'
-score = 'score2'
-threshold = 8
 
-# 读取CSV文件
-input_file = f'./predict_csv/{years}-{model}.csv'  # 请替换为您的输入文件名
-output_file = f'./filtered_csv/{years}-{model}-{score}_greater_than_{threshold}.csv'  # 输出文件名
+if __name__=='__main__':
+    models = {'xlnet', 'roberta'}
+    years = {'2011-2019', '2020-2022', '2023'}
+    scores = {'score1', 'score2'}
+    thres = [
+        ('less', 2),
+        ('greater', 7),
+        ('greater', 8)
+     ]
 
-# 读取CSV文件
-df = load_prediction_data(input_file)
+    for model in models:
+        for year in years:
+            for score in scores:
+                for less_or_greater, threshold in thres:
+                    # 读取CSV文件
+                    input_file = f'./predict_csv/{year}-{model}.csv'  # 请替换为您的输入文件名
+                    output_file = f'./filtered_csv/{model}/{score}/{year}-{model}-{score}_{less_or_greater}_than_{threshold}.csv'  # 输出文件名
 
-# 将score列转换为数值类型，无法转换的值设为NaN
-df[f'{score}_预测'] = pd.to_numeric(df[f'{score}_预测'], errors='coerce')
+                    if not os.path.exists(input_file):
+                        continue
 
-# 筛选score大于threshold的行，同时排除NaN值
-filtered_df = df[df[f'{score}_预测'] > threshold].dropna(subset=[f'{score}_预测'])
+                    if os.path.exists(output_file):
+                        print(f'{output_file} 已存在')
+                        continue
 
-# 将结果写入新的CSV文件
-filtered_df.to_csv(output_file, index=False)
+                    # 读取CSV文件
+                    df = load_prediction_data(input_file)
 
-print(f"已将{score}大于{threshold}的行写入到 {output_file}")
-print(f"总行数: {len(df)}, 筛选后行数: {len(filtered_df)}")
+                    # 将score列转换为数值类型，无法转换的值设为NaN
+                    df[f'{score}_预测'] = pd.to_numeric(df[f'{score}_预测'], errors='coerce')
+
+                    if less_or_greater == 'less':
+                        filtered_df = df[df[f'{score}_预测'] < threshold].dropna(subset=[f'{score}_预测'])
+                    else:
+                        filtered_df = df[df[f'{score}_预测'] > threshold].dropna(subset=[f'{score}_预测'])
+
+                    # 将结果写入新的CSV文件
+                    filtered_df.to_csv(output_file, index=False)
+
+                    print(f"已将{score} {less_or_greater} than {threshold}的行写入到 {output_file}")
+                    print(f"总行数: {len(df)}, 筛选后行数: {len(filtered_df)}")
