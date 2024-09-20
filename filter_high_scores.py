@@ -40,21 +40,20 @@ if __name__=='__main__':
 
     for model in models:
         for year in years:
+            input_file = f'./predict_csv/{year}-{model}.csv'  # 请替换为您的输入文件名
+            if not os.path.exists(input_file):
+                        continue
+            df = load_prediction_data(input_file)
             for score in scores:
                 for less_or_greater, threshold in thres:
-                    # 读取CSV文件
-                    input_file = f'./predict_csv/{year}-{model}.csv'  # 请替换为您的输入文件名
-                    output_file = f'./filtered_csv/{model}/{score}/{year}-{model}-{score}_{less_or_greater}_than_{threshold}.csv'  # 输出文件名
-
-                    if not os.path.exists(input_file):
+                    if score == 'score1' and threshold == 7:
                         continue
+                        
+                    output_file = f'./filtered_csv/{model}/{score}/{year}-{model}-{score}_{less_or_greater}_than_{threshold}.csv'  # 输出文件名
 
                     if os.path.exists(output_file):
                         print(f'{output_file} 已存在')
                         continue
-
-                    # 读取CSV文件
-                    df = load_prediction_data(input_file)
 
                     # 将score列转换为数值类型，无法转换的值设为NaN
                     df[f'{score}_预测'] = pd.to_numeric(df[f'{score}_预测'], errors='coerce')
