@@ -7,7 +7,7 @@ import math
 import csv
 from tqdm import tqdm
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 os.environ["HF_CACHE_DIR"] = "/mnt/data21/liuhao/hf_cache"
 os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
 warnings.filterwarnings('ignore')
@@ -90,7 +90,7 @@ def main():
     model2, tokenizer2 = load_model_and_tokenizer(model_name, model2_path)
 
     # Load the prediction data
-    file_path = f'最终标注结果4000.csv'
+    file_path = f'./origin_csv/最终标注结果4000.csv'
     df = load_prediction_data(file_path)
     
     # Extract the "留言内容" column for prediction
@@ -109,7 +109,7 @@ def main():
     df['score2_预测'] = score2_predictions
     
     # Save the results to a new CSV
-    df.to_csv(f'4000-{model}.csv', index=False)
+    df.to_csv(f'./predict_csv/4000-{model}.csv', index=False)
     print(f"Predictions saved to '4000-{model}.csv'")
 
 if __name__ == "__main__":
