@@ -26,14 +26,14 @@ def load_prediction_data(file_path):
     
     return df
 
-years = '2011-2019'
+years = '2023'
 model = 'roberta'
 score = 'score2'
 threshold = 8
 
 # 读取CSV文件
 input_file = f'./predict_csv/{years}-{model}.csv'  # 请替换为您的输入文件名
-output_file = f'./filter_csv/{years}-{model}-{score}_greater_than_{threshold}.csv'  # 输出文件名
+output_file = f'./filtered_csv/{years}-{model}-{score}_greater_than_{threshold}.csv'  # 输出文件名
 
 # 读取CSV文件
 df = load_prediction_data(input_file)
