@@ -1,3 +1,5 @@
 logs/*
 models/*
 origin_csv/*
+predict_csv/*
+filtered_csv/*

@@ -70,7 +70,7 @@ def predict(model, tokenizer, texts, max_length=256):
 
 # Main prediction pipeline
 def main():
-    model = 'xlnet'
+    model = 'roberta'
 
     model_name = ''
     model1_path = ''

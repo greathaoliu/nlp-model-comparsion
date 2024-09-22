@@ -5,7 +5,7 @@ import os
 def load_prediction_data(file_path):
     def read_csv_robust(file_path):
         with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
-            reader = csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            reader = csv.reader(f, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             headers = next(reader)
             data = []
             for i, row in enumerate(reader, start=2):
@@ -19,7 +19,7 @@ def load_prediction_data(file_path):
         return pd.DataFrame(data, columns=headers)
     
     try:
-        df = pd.read_csv(file_path, quotechar='"', quoting=csv.QUOTE_ALL, skipinitialspace=True, escapechar='\\')
+        df = pd.read_csv(file_path, quoting=csv.QUOTE_ALL, skipinitialspace=True, escapechar='\\')
     except Exception as e:
         print(f"Error reading CSV with pandas: {e}")
         print("Attempting to read file with custom method...")
@@ -40,9 +40,10 @@ if __name__=='__main__':
 
     for model in models:
         for year in years:
-            input_file = f'./predict_csv/{year}-{model}.csv'  # 请替换为您的输入文件名
+            input_file = f'./predict_csv/{year}-{model}.csv'
             if not os.path.exists(input_file):
-                        continue
+                print(f'{input_file} 不存在')
+                continue
             df = load_prediction_data(input_file)
             for score in scores:
                 for less_or_greater, threshold in thres:
